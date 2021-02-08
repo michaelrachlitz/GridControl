@@ -111,6 +111,8 @@ class FireGento_GridControl_Model_Observer
                     $column->setIndex($columnJoinField[$column->getId()]);
                 }
             }
+            
+            $event->getCollection()->getSelect()->group('e.entity_id');
         }
     }
 }
