@@ -69,7 +69,6 @@ class FireGento_GridControl_Model_Observer
                     Mage::logException($e);
                 }
             }
-
             // join fields to collection
             foreach ($config->getCollectionUpdates(FireGento_GridControl_Model_Config::TYPE_JOIN_FIELD, $blockId) as $field) {
                 $field = explode('|', $field);
@@ -94,7 +93,7 @@ class FireGento_GridControl_Model_Observer
             // joins to collection
             foreach ($config->getCollectionUpdates(FireGento_GridControl_Model_Config::TYPE_JOIN, $blockId) as $field) {
                 try {
-                    $event->getCollection()->join(
+                    $event->getCollection()->getSelect()->join(
                         $field['table'],
                         str_replace('{{table}}', '`' . $field['table'] . '`', $field['condition']),
                         $field['field']
@@ -111,8 +110,10 @@ class FireGento_GridControl_Model_Observer
                     $column->setIndex($columnJoinField[$column->getId()]);
                 }
             }
-            
-            $event->getCollection()->getSelect()->group('e.entity_id');
+
+            if ($blockId == "productGrid") {
+                $event->getCollection()->getSelect()->group('e.entity_id');
+            }
         }
     }
 }
